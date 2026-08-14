@@ -77,7 +77,7 @@ function Invoke-CommandChecked {
         & $Command @Arguments
 
         if ($LASTEXITCODE -ne 0) {
-            throw "Command '$Command' завершилась с кодом $LASTEXITCODE"
+            throw "Command '$Command' Р·Р°РІРµСЂС€РёР»Р°СЃСЊ СЃ РєРѕРґРѕРј $LASTEXITCODE"
         }
     }
     finally {
@@ -101,111 +101,111 @@ Write-Host "Plugins   : $PluginsPath"
 # Check dependencies
 # ------------------------------------------------------------
 
-Write-Header "Проверка зависимостей"
+Write-Header "РџСЂРѕРІРµСЂРєР° Р·Р°РІРёСЃРёРјРѕСЃС‚РµР№"
 
 if (-not (Test-CommandExists "git")) {
-    Write-Failure "Git не найден в PATH."
-    Write-Host "Установи Git и убедись, что команда 'git' работает в терминале."
+    Write-Failure "Git РЅРµ РЅР°Р№РґРµРЅ РІ PATH."
+    Write-Host "РЈСЃС‚Р°РЅРѕРІРё Git Рё СѓР±РµРґРёСЃСЊ, С‡С‚Рѕ РєРѕРјР°РЅРґР° 'git' СЂР°Р±РѕС‚Р°РµС‚ РІ С‚РµСЂРјРёРЅР°Р»Рµ."
     exit 1
 }
 
-Write-Success "Git найден."
+Write-Success "Git РЅР°Р№РґРµРЅ."
 
 if (-not (Test-CommandExists "pnpm")) {
-    Write-Failure "pnpm не найден в PATH."
-    Write-Host "Установи pnpm и убедись, что команда 'pnpm' работает в терминале."
+    Write-Failure "pnpm РЅРµ РЅР°Р№РґРµРЅ РІ PATH."
+    Write-Host "РЈСЃС‚Р°РЅРѕРІРё pnpm Рё СѓР±РµРґРёСЃСЊ, С‡С‚Рѕ РєРѕРјР°РЅРґР° 'pnpm' СЂР°Р±РѕС‚Р°РµС‚ РІ С‚РµСЂРјРёРЅР°Р»Рµ."
     exit 1
 }
 
-Write-Success "pnpm найден."
+Write-Success "pnpm РЅР°Р№РґРµРЅ."
 
 # ------------------------------------------------------------
 # Check Vencord
 # ------------------------------------------------------------
 
-Write-Header "Проверка Vencord"
+Write-Header "РџСЂРѕРІРµСЂРєР° Vencord"
 
 if (-not (Test-Path $VencordPath)) {
-    Write-Failure "Папка Vencord не найдена:"
+    Write-Failure "РџР°РїРєР° Vencord РЅРµ РЅР°Р№РґРµРЅР°:"
     Write-Host $VencordPath
     exit 1
 }
 
 if (-not (Test-Path (Join-Path $VencordPath ".git"))) {
-    Write-Failure "Папка Vencord найдена, но это не Git-репозиторий:"
+    Write-Failure "РџР°РїРєР° Vencord РЅР°Р№РґРµРЅР°, РЅРѕ СЌС‚Рѕ РЅРµ Git-СЂРµРїРѕР·РёС‚РѕСЂРёР№:"
     Write-Host $VencordPath
     exit 1
 }
 
-Write-Success "Vencord найден."
+Write-Success "Vencord РЅР°Р№РґРµРЅ."
 
 if (-not (Test-Path $PluginsPath)) {
-    Write-Failure "Папка userplugins не найдена:"
+    Write-Failure "РџР°РїРєР° userplugins РЅРµ РЅР°Р№РґРµРЅР°:"
     Write-Host $PluginsPath
     exit 1
 }
 
-Write-Success "Папка userplugins найдена."
+Write-Success "РџР°РїРєР° userplugins РЅР°Р№РґРµРЅР°."
 
 # ------------------------------------------------------------
 # Update Vencord itself
 # ------------------------------------------------------------
 
-Write-Header "Обновление Vencord"
+Write-Header "РћР±РЅРѕРІР»РµРЅРёРµ Vencord"
 
 try {
 
-    Write-Step "Проверяем обновления Vencord..."
+    Write-Step "РџСЂРѕРІРµСЂСЏРµРј РѕР±РЅРѕРІР»РµРЅРёСЏ Vencord..."
 
     Push-Location $VencordPath
 
-    # Получаем информацию о новых коммитах,
-    # но пока ничего не изменяем.
+    # РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РЅРѕРІС‹С… РєРѕРјРјРёС‚Р°С…,
+    # РЅРѕ РїРѕРєР° РЅРёС‡РµРіРѕ РЅРµ РёР·РјРµРЅСЏРµРј.
     git fetch
 
     if ($LASTEXITCODE -ne 0) {
-        throw "git fetch завершился с ошибкой."
+        throw "git fetch Р·Р°РІРµСЂС€РёР»СЃСЏ СЃ РѕС€РёР±РєРѕР№."
     }
 
-    # Получаем текущую ветку
+    # РџРѕР»СѓС‡Р°РµРј С‚РµРєСѓС‰СѓСЋ РІРµС‚РєСѓ
     $CurrentBranch = git branch --show-current
 
     if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($CurrentBranch)) {
-        throw "Не удалось определить текущую Git-ветку Vencord."
+        throw "РќРµ СѓРґР°Р»РѕСЃСЊ РѕРїСЂРµРґРµР»РёС‚СЊ С‚РµРєСѓС‰СѓСЋ Git-РІРµС‚РєСѓ Vencord."
     }
 
-    Write-Host "Текущая ветка: $CurrentBranch" -ForegroundColor DarkGray
+    Write-Host "РўРµРєСѓС‰Р°СЏ РІРµС‚РєР°: $CurrentBranch" -ForegroundColor DarkGray
 
-    # Проверяем, есть ли изменения на remote
+    # РџСЂРѕРІРµСЂСЏРµРј, РµСЃС‚СЊ Р»Рё РёР·РјРµРЅРµРЅРёСЏ РЅР° remote
     $BehindCount = git rev-list --count "HEAD..origin/$CurrentBranch"
 
     if ($LASTEXITCODE -ne 0) {
-        throw "Не удалось проверить наличие обновлений Vencord."
+        throw "РќРµ СѓРґР°Р»РѕСЃСЊ РїСЂРѕРІРµСЂРёС‚СЊ РЅР°Р»РёС‡РёРµ РѕР±РЅРѕРІР»РµРЅРёР№ Vencord."
     }
 
     if ([int]$BehindCount -gt 0) {
 
         Write-Host ""
-        Write-Host "Доступно обновлений коммитов: $BehindCount" -ForegroundColor Yellow
+        Write-Host "Р”РѕСЃС‚СѓРїРЅРѕ РѕР±РЅРѕРІР»РµРЅРёР№ РєРѕРјРјРёС‚РѕРІ: $BehindCount" -ForegroundColor Yellow
         Write-Host ""
 
-        Write-Step "Обновляем Vencord..."
+        Write-Step "РћР±РЅРѕРІР»СЏРµРј Vencord..."
 
         git pull
 
         if ($LASTEXITCODE -ne 0) {
-            throw "git pull Vencord завершился с ошибкой."
+            throw "git pull Vencord Р·Р°РІРµСЂС€РёР»СЃСЏ СЃ РѕС€РёР±РєРѕР№."
         }
 
-        Write-Success "Vencord обновлён."
+        Write-Success "Vencord РѕР±РЅРѕРІР»С‘РЅ."
     }
     else {
-        Write-Success "Vencord уже актуален."
+        Write-Success "Vencord СѓР¶Рµ Р°РєС‚СѓР°Р»РµРЅ."
     }
 }
 catch {
 
-    Write-Failure "Не удалось обновить Vencord."
+    Write-Failure "РќРµ СѓРґР°Р»РѕСЃСЊ РѕР±РЅРѕРІРёС‚СЊ Vencord."
     Write-Host $_.Exception.Message -ForegroundColor Red
 
     Pop-Location
@@ -213,12 +213,12 @@ catch {
 }
 finally {
 
-    # Защита от ситуации, когда Push-Location ещё активен
+    # Р—Р°С‰РёС‚Р° РѕС‚ СЃРёС‚СѓР°С†РёРё, РєРѕРіРґР° Push-Location РµС‰С‘ Р°РєС‚РёРІРµРЅ
     try {
         Pop-Location
     }
     catch {
-        # Ничего не делаем
+        # РќРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј
     }
 }
 
@@ -226,7 +226,7 @@ finally {
 # Find plugins
 # ------------------------------------------------------------
 
-Write-Header "Поиск userplugins"
+Write-Header "РџРѕРёСЃРє userplugins"
 
 $Plugins = Get-ChildItem `
     -Path $PluginsPath `
@@ -237,11 +237,11 @@ $Plugins = Get-ChildItem `
     }
 
 if ($Plugins.Count -eq 0) {
-    Write-Failure "Git-репозитории в userplugins не найдены."
+    Write-Failure "Git-СЂРµРїРѕР·РёС‚РѕСЂРёРё РІ userplugins РЅРµ РЅР°Р№РґРµРЅС‹."
     exit 1
 }
 
-Write-Host "Найдено репозиториев: $($Plugins.Count)" -ForegroundColor Green
+Write-Host "РќР°Р№РґРµРЅРѕ СЂРµРїРѕР·РёС‚РѕСЂРёРµРІ: $($Plugins.Count)" -ForegroundColor Green
 Write-Host ""
 
 foreach ($Plugin in $Plugins) {
@@ -252,9 +252,8 @@ foreach ($Plugin in $Plugins) {
 # Update plugins
 # ------------------------------------------------------------
 
-Write-Header "Обновление userplugins"
-
-$FailedPlugins = @()
+$UpdatedPlugins = @()
+$FailedPlugins  = @()
 
 foreach ($Plugin in $Plugins) {
 
@@ -267,34 +266,97 @@ foreach ($Plugin in $Plugins) {
     try {
 
         # ----------------------------------------------------
-        # Git pull
+        # Check for updates
         # ----------------------------------------------------
 
-        Write-Step "git pull"
+        Write-Step "РџСЂРѕРІРµСЂСЏРµРј РѕР±РЅРѕРІР»РµРЅРёСЏ..."
 
-        Invoke-CommandChecked `
-            -Command "git" `
-            -Arguments @("pull") `
-            -WorkingDirectory $Plugin.FullName
+        Push-Location $Plugin.FullName
 
-        Write-Success "$($Plugin.Name): git pull завершён."
+        try {
 
-        # ----------------------------------------------------
-        # pnpm install
-        # ----------------------------------------------------
+            # РџРѕР»СѓС‡Р°РµРј СЃРІРµР¶СѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ СЃ remote
+            git fetch
 
-        Write-Step "pnpm i"
+            if ($LASTEXITCODE -ne 0) {
+                throw "git fetch Р·Р°РІРµСЂС€РёР»СЃСЏ СЃ РѕС€РёР±РєРѕР№."
+            }
 
-        Invoke-CommandChecked `
-            -Command "pnpm" `
-            -Arguments @("i") `
-            -WorkingDirectory $Plugin.FullName
+            # РћРїСЂРµРґРµР»СЏРµРј С‚РµРєСѓС‰СѓСЋ РІРµС‚РєСѓ
+            $CurrentBranch = git branch --show-current
 
-        Write-Success "$($Plugin.Name): pnpm i завершён."
+            if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($CurrentBranch)) {
+                throw "РќРµ СѓРґР°Р»РѕСЃСЊ РѕРїСЂРµРґРµР»РёС‚СЊ С‚РµРєСѓС‰СѓСЋ Git-РІРµС‚РєСѓ."
+            }
+
+            Write-Host "РўРµРєСѓС‰Р°СЏ РІРµС‚РєР°: $CurrentBranch" -ForegroundColor DarkGray
+
+            # РџСЂРѕРІРµСЂСЏРµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕРјРјРёС‚РѕРІ РЅР° remote,
+            # РєРѕС‚РѕСЂС‹С… РЅРµС‚ Р»РѕРєР°Р»СЊРЅРѕ
+            $BehindCount = git rev-list --count "HEAD..origin/$CurrentBranch"
+
+            if ($LASTEXITCODE -ne 0) {
+                throw "РќРµ СѓРґР°Р»РѕСЃСЊ РїСЂРѕРІРµСЂРёС‚СЊ РЅР°Р»РёС‡РёРµ РѕР±РЅРѕРІР»РµРЅРёР№."
+            }
+
+            if ([int]$BehindCount -eq 0) {
+
+                # ------------------------------------------------
+                # Plugin is already up to date
+                # ------------------------------------------------
+
+                Write-Success "$($Plugin.Name): СѓР¶Рµ Р°РєС‚СѓР°Р»РµРЅ."
+
+            }
+            else {
+
+                # ------------------------------------------------
+                # Plugin needs update
+                # ------------------------------------------------
+
+                Write-Host ""
+                Write-Host "Р”РѕСЃС‚СѓРїРЅРѕ РЅРѕРІС‹С… РєРѕРјРјРёС‚РѕРІ: $BehindCount" -ForegroundColor Yellow
+                Write-Host ""
+
+                # ------------------------------------------------
+                # Git pull
+                # ------------------------------------------------
+
+                Write-Step "РћР±РЅРѕРІР»СЏРµРј git..."
+
+                git pull
+
+                if ($LASTEXITCODE -ne 0) {
+                    throw "git pull Р·Р°РІРµСЂС€РёР»СЃСЏ СЃ РѕС€РёР±РєРѕР№."
+                }
+
+                Write-Success "$($Plugin.Name): git pull Р·Р°РІРµСЂС€С‘РЅ."
+
+                # ------------------------------------------------
+                # pnpm install
+                # ------------------------------------------------
+
+                Write-Step "pnpm i"
+
+                & pnpm i
+
+                if ($LASTEXITCODE -ne 0) {
+                    throw "pnpm i Р·Р°РІРµСЂС€РёР»СЃСЏ СЃ РѕС€РёР±РєРѕР№."
+                }
+
+                Write-Success "$($Plugin.Name): pnpm i Р·Р°РІРµСЂС€С‘РЅ."
+
+                # Р—Р°РїРѕРјРёРЅР°РµРј РїР»Р°РіРёРЅ РєР°Рє РѕР±РЅРѕРІР»С‘РЅРЅС‹Р№
+                $UpdatedPlugins += $Plugin.Name
+            }
+        }
+        finally {
+            Pop-Location
+        }
     }
     catch {
 
-        Write-Failure "$($Plugin.Name): ошибка!"
+        Write-Failure "$($Plugin.Name): РѕС€РёР±РєР°!"
         Write-Host $_.Exception.Message -ForegroundColor Red
 
         $FailedPlugins += $Plugin.Name
@@ -302,33 +364,51 @@ foreach ($Plugin in $Plugins) {
 }
 
 # ------------------------------------------------------------
-# Check plugin update results
+# Updated plugins
 # ------------------------------------------------------------
 
-Write-Header "Результат обновления плагинов"
+if ($UpdatedPlugins.Count -gt 0) {
+
+    Write-Host "РћР±РЅРѕРІР»РµРЅС‹:" -ForegroundColor Green
+
+    foreach ($PluginName in $UpdatedPlugins) {
+        Write-Host "  - $PluginName" -ForegroundColor Green
+    }
+
+}
+else {
+    Write-Host ""
+    Write-Host "РќРё РѕРґРёРЅ РїР»Р°РіРёРЅ РЅРµ С‚СЂРµР±РѕРІР°Р» РѕР±РЅРѕРІР»РµРЅРёСЏ." -ForegroundColor Cyan
+}
+
+Write-Host ""
+
+# ------------------------------------------------------------
+# Failed plugins
+# ------------------------------------------------------------
 
 if ($FailedPlugins.Count -gt 0) {
 
-    Write-Failure "Некоторые плагины не удалось обновить:"
+    Write-Host "РќР• СѓРґР°Р»РѕСЃСЊ РѕР±РЅРѕРІРёС‚СЊ:" -ForegroundColor Red
 
     foreach ($PluginName in $FailedPlugins) {
         Write-Host "  - $PluginName" -ForegroundColor Red
     }
 
     Write-Host ""
-    Write-Failure "Сборка Vencord остановлена."
-    Write-Host "Исправь ошибки выше и запусти скрипт снова."
+    Write-Failure "РЎР±РѕСЂРєР° Vencord РѕСЃС‚Р°РЅРѕРІР»РµРЅР°."
+    Write-Host "РСЃРїСЂР°РІСЊ РѕС€РёР±РєРё РІС‹С€Рµ Рё Р·Р°РїСѓСЃС‚Рё СЃРєСЂРёРїС‚ СЃРЅРѕРІР°."
 
     exit 1
 }
 
-Write-Success "Все userplugins успешно обновлены."
+Write-Success "РџСЂРѕРІРµСЂРєР° userplugins Р·Р°РІРµСЂС€РµРЅР°."
 
 # ------------------------------------------------------------
 # Build Vencord
 # ------------------------------------------------------------
 
-Write-Header "Сборка Vencord"
+Write-Header "РЎР±РѕСЂРєР° Vencord"
 
 try {
 
@@ -339,11 +419,11 @@ try {
         -Arguments @("build") `
         -WorkingDirectory $VencordPath
 
-    Write-Success "Vencord успешно собран."
+    Write-Success "Vencord СѓСЃРїРµС€РЅРѕ СЃРѕР±СЂР°РЅ."
 }
 catch {
 
-    Write-Failure "Сборка Vencord завершилась ошибкой."
+    Write-Failure "РЎР±РѕСЂРєР° Vencord Р·Р°РІРµСЂС€РёР»Р°СЃСЊ РѕС€РёР±РєРѕР№."
     Write-Host $_.Exception.Message -ForegroundColor Red
 
     exit 1
@@ -364,11 +444,11 @@ try {
         -Arguments @("inject") `
         -WorkingDirectory $VencordPath
 
-    Write-Success "Vencord успешно injected."
+    Write-Success "Vencord СѓСЃРїРµС€РЅРѕ injected."
 }
 catch {
 
-    Write-Failure "pnpm inject завершился ошибкой."
+    Write-Failure "pnpm inject Р·Р°РІРµСЂС€РёР»СЃСЏ РѕС€РёР±РєРѕР№!"
     Write-Host $_.Exception.Message -ForegroundColor Red
 
     exit 1
@@ -378,15 +458,15 @@ catch {
 # Done
 # ------------------------------------------------------------
 
-Write-Header "ГОТОВО"
+Write-Header "Р“РћРўРћР’Рћ"
 
-Write-Host "Vencord обновлён/проверен." -ForegroundColor Green
-Write-Host "Все userplugins обновлены." -ForegroundColor Green
-Write-Host "Vencord собран." -ForegroundColor Green
+Write-Host "Vencord РѕР±РЅРѕРІР»С‘РЅ/РїСЂРѕРІРµСЂРµРЅ." -ForegroundColor Green
+Write-Host "Р’СЃРµ userplugins РѕР±РЅРѕРІР»РµРЅС‹." -ForegroundColor Green
+Write-Host "Vencord СЃРѕР±СЂР°РЅ." -ForegroundColor Green
 Write-Host "Vencord injected." -ForegroundColor Green
 
 Write-Host ""
-Write-Host "Можно запускать Discord." -ForegroundColor Cyan
+Write-Host "РњРѕР¶РЅРѕ Р·Р°РїСѓСЃРєР°С‚СЊ Discord." -ForegroundColor Cyan
 Write-Host ""
 
-Read-Host "Нажми Enter для выхода"
+Read-Host "РќР°Р¶РјРё Enter РґР»СЏ РІС‹С…РѕРґР°"
