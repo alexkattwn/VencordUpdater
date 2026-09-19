@@ -466,7 +466,23 @@ Write-Host "Vencord собран." -ForegroundColor Green
 Write-Host "Vencord injected." -ForegroundColor Green
 
 Write-Host ""
-Write-Host "Можно запускать Discord." -ForegroundColor Cyan
+
+# ------------------------------------------------------------
+# Restart Discord
+# ------------------------------------------------------------
+
+Write-Step "Запускаем Discord..."
+
+$DiscordInstallerPath = Join-Path $env:LOCALAPPDATA "Discord\Update.exe"
+
+if (Test-Path $DiscordInstallerPath) {
+    Start-Process -FilePath $DiscordInstallerPath -ArgumentList "--processStart Discord.exe"
+    Write-Success "Discord успешно запущен."
+}
+else {
+    Write-Failure "Файл запуска Discord не найден по пути: $DiscordInstallerPath"
+}
+
 Write-Host ""
 
 Read-Host "Нажми Enter для выхода"
